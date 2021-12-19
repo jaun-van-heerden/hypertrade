@@ -9,7 +9,7 @@ class Manager:
 
     def __init__(self, interval):
         """
-        timimg
+        timing
         """
         self.interval = interval
 
