@@ -3,6 +3,7 @@ from time import sleep
 from bot import Bot
 import time
 from pprint import pprint
+from loguru import logger
 
 
 class Manager:
@@ -13,23 +14,26 @@ class Manager:
         """
         self.interval = interval
 
-        print('initialising manager')
+        logger.info('initialising manager')
 
-        print('connecting to Swyftx')
+        logger.info('connecting to Swyftx')
+
         self.swyftx = Swyftx()
+
+        logger.info('connected to Swyftx')
 
         self.bots = []
 
     def add_bot(self):
-        print('adding bot')
+
+        logger.info('Adding Bot')
+
         bot = Bot()
+
         self.bots.append(bot)
 
     """
     Gets data for all assets
-
-
-
     """
 
     def find_top_accelerator(self, interval, num_top=10):
@@ -39,9 +43,8 @@ class Manager:
 
         milli_start = milli_end - interval * 1000 * 60 * 60
 
-        # get all assest data
+        # get all asset data
         for asset in self.swyftx.market_assets:
-
             pprint(asset)
 
             self.swyftx.get_asset_data('1',
@@ -53,6 +56,7 @@ class Manager:
                                        str(20))
 
     def run(self):
+
         while True:
             sleep(self.interval)
 

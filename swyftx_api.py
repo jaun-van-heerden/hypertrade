@@ -1,6 +1,7 @@
 import requests
 import json
 from pprint import pprint
+from loguru import logger
 
 
 class Swyftx:
@@ -8,7 +9,7 @@ class Swyftx:
     def __init__(self, demo_mode=False):
         self.base_url = "https://api.swyftx.com.au/"
 
-        with open("key.json") as key_file:
+        with open("resources/key.json") as key_file:
             data = json.load(key_file)
             self.key = data["key"]
             self.token = data["token"]
@@ -53,7 +54,7 @@ class Swyftx:
 
     def test_connection(self):
         response = requests.get(self.base_url)
-        print(response.status_code)
+        logger.info(f'testing connection {response.status_code}')
 
     def get_balance(self):
         webaddr = self.base_url + "user/balance/"
@@ -68,7 +69,7 @@ class Swyftx:
         self.market_assets = self.get_request("Market Assets", webaddr)
 
     def get_request(self, loc, req_str):
-        print(f"Retrieving {loc} <{req_str}>")
+        logger.info(f"Retrieving {loc} <{req_str}>")
 
         response = requests.get(req_str, headers=self.headers)
 
@@ -105,7 +106,7 @@ if __name__ == "__main__":
     swyftx = Swyftx()
 
     # test check connection
-    # swyftx.test_connection()
+    swyftx.test_connection()
 
     # test get balance
     # swyftx.get_balance()
