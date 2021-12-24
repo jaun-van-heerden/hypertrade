@@ -3,8 +3,22 @@ from loguru import logger
 
 class Bot:
 
-    def __init__(self):
-        print('initialising bot')
+    def __init__(self,
+                 name: str,
+                 asset: str,
+                 spend_max: float):
+
+
+        logger.info('initialising bot')
+
+        self.name = name
+
+        self.asset = asset
+
+
+        self.spend_max = spend_max
+
 
     def run(self):
-        print('running bot')
+
+        logger.info('running bot')
