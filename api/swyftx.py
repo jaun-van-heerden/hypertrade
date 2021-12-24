@@ -4,53 +4,33 @@ from pprint import pprint
 from loguru import logger
 
 
-class Swyftx:
+class Manager:
 
-    def __init__(self, demo_mode=False):
+    def __init__(self, config=None):
+        # """ demo mode """
+        # self.demo_mode = demo_mode
+        # self.base_url = "https://api.swyftx.com.au/"
+        # if self.demo_mode:
+        #     self.base_url = "https://api.demo.swyftx.com.au"
+
+        self.config = config
         self.base_url = "https://api.swyftx.com.au/"
+        self.key = None
+        self.token = None
 
-        with open("resources/key.json") as key_file:
-            data = json.load(key_file)
-            self.key = data["key"]
-            self.token = data["token"]
-
-        self.status = "disconnected"
-
-        """
-        requests
-        """
+        """ requests """
         self.headers = {"Content - Type": "application / json",
                         "Authorization": f"Bearer {self.token}"}
 
-        """
-        demo mode
-        """
-
-        self.demo_mode = demo_mode
-
-        if self.demo_mode:
-            self.base_url = "https://api.demo.swyftx.com.au"
-
-        """
-        balance
-        """
-
+        """ balance """
         self.balance = None
 
-        """
-        market assets
-        """
+        """ market assets """
         self.market_assets = None
 
-        """
-        profile
-        """
+        """ profile """
         self.profile = None
 
-        """
-        market assets
-        """
-        self.get_market_assets()
 
     def test_connection(self):
         response = requests.get(self.base_url)
@@ -70,11 +50,8 @@ class Swyftx:
 
     def get_request(self, loc, req_str):
         logger.info(f"Retrieving {loc} <{req_str}>")
-
         response = requests.get(req_str, headers=self.headers)
-
         pprint(response.json())
-
         return response.json()
 
     def get_asset_data(self,
@@ -85,7 +62,6 @@ class Swyftx:
                        timeStart,
                        timeEnd,
                        limit):
-
         """parameters"""
         webaddr = "https://api.swyftx.com.au/charts/getBars/" + \
                   baseAsset + "/" + \
@@ -101,9 +77,15 @@ class Swyftx:
         print(data)
         input()
 
+    def set_auth(self):
+        """SET """
+        with open(self.config['key']['swyftx']) as file:
+            data = json.load(file)
+            self.key, self.token = data["key"], data["token"]
+
 
 if __name__ == "__main__":
-    swyftx = Swyftx()
+    swyftx = Manager()
 
     # test check connection
     swyftx.test_connection()
